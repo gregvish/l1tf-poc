@@ -86,3 +86,22 @@ Having the physical address, we can now read it using the PoC on the *guest* mac
 
 Alternatively, a utility called "phys" is included with this PoC. When run on the host machine, it forces some datda into the L1 cache on a single core, and outputs a physical address of this data. This address can be used with the PoC on the guest VM.
 
+# Practicality
+
+The attack is limited by the following factors:
+ 1) Data needs to be in the L1 cache (only 32KB) in order to be read at the time of sampling one byte. For every byte.
+ 2) Each CPU core has a separate L1 cache (shared between the 2 hyperthreads). The attacker process must run on the right core.
+ 3) Physical address randomization makes it harder for the attacker to find the targeted data.
+ 
+The limitaion of host physical address randomization appears to not be very significant for this attack vector, as on my machine I got about 14 bits of entropy for the host kernels physical addresses. Therefore, it's possible to find the very recognizable sys_call_table with 16k read attempts (perhaps 10-20 minutes based on this PoC). From there all addresses in the host kernel can be resolved.
+
+As for the other limitations, the attacker will be limited to reading "hot" (very frequently accessed) data. For example, the kernel routing table (exposing host IPs), hard disk ecryption key (if in RAM), etc. However, if the attacker has some interface to quickly trigger a data access on the victim process (for example, HTTP request, IP packet, etc), this data will effectively become "hot" if the request is sent repeatedly. An example for such data is authentication tokens (comparison with a hash means the correct hash is accessed in memory).
+
+# Implications
+
+It is not safe to run VMs (with isolation in mind) on unpatched VMMs on vulnerable CPUs.
+If a VM on an unpatched ESX server (or other virtualisation setup) is compromised, all data on all other guest VMs and the host may be read.
+
+A specific interesting case is the use of VMs for strong internet anonymity. The user runs a browser (or hidden service) in an isolated guest VM. The VM is accessible only to a virtual network interface that can only route traffic over TOR. The assumption is that even if the guest VM is compromised, the attacker will not be able to know the real host machines IP address (or other identifying information). Using this attack, it is however easy to read the hosts routing table to extract such information.
+
+Therefore in all such use cases, users *must* ensure that *both* their host kernel and VMM are patched, the corresponding CPU microcode update has be applied by the host kernel, *and* that the VMs do not share hyperthreads with any other processes.
