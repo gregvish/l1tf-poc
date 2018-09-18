@@ -10,8 +10,11 @@ The setup on which this PoC was tested:
 
 CPU: Intel Core i7-6500U
 Host system: Ubuntu 18.04.1, kernel: Ubuntu kernel 4.15.0-34 from Aug 27 (has patch for L1TF) 
+
 VMM: VMware Workstation player 14.1.2 build-8497320 (one version prior to the newest patched version)
+
 Guest system: Same as host
+
 
 VMWare has released a patch, available since version 14.1.3 of VMware Workstation player. All VMware products received a similar patch on August 14 2018. It is reasonable to assume that this PoC will reproduce on all other VMware products last patched prior to that date (including ESX).
 
