@@ -104,4 +104,4 @@ If a VM on an unpatched ESX server (or other virtualisation setup) is compromise
 
 A specific interesting case is the use of VMs for strong internet anonymity. The user runs a browser (or hidden service) in an isolated guest VM. The VM is accessible only to a virtual network interface that can only route traffic over TOR. The assumption is that even if the guest VM is compromised, the attacker will not be able to know the real host machines IP address (or other identifying information). Using this attack, it is however easy to read the hosts routing table to extract such information.
 
-Therefore in all such use cases, users *must* ensure that *both* their host kernel and VMM are patched, the corresponding CPU microcode update has be applied by the host kernel, *and* that the VMs do not share hyperthreads with any other processes.
+Therefore in all such use cases, users *must* ensure that *both* their host kernel and VMM are patched, the corresponding CPU microcode update has been applied by the host kernel, *and* that the VMs do not share hyperthreads with any other processes.
