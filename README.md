@@ -19,7 +19,7 @@ Needless to say, this PoC is likely to reproduce on all other modern (non VMware
 
 # How this PoC works
 
-Given root acces to a guest VM, the PoC uses /dev/mem in order to:
+Given root access to a guest VM, the PoC uses /dev/mem in order to:
  1) Map a page to a dummy (magic) physical address
  2) Exhaustively search the entire memory (of the guest VM) in order to find the PTE that maps the magic address
  3) Rewrite the magic address PTE with a special (L1TF) entry for the target *host* physical address marked as *not-present*
