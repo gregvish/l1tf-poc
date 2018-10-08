@@ -127,7 +127,7 @@ void set_cpu(uint8_t cpu)
 bool read_memory_byte(uint8_t *ptr, uint8_t *out_byte)
 {
     uint64_t i = 0;
-    uint8_t byte_scores[0x100] = {0};
+    uint64_t byte_scores[0x100] = {0};
     uint8_t num_cpus = get_nprocs();
 
     // Make a bunch of attempts, as some may fail due to noise
